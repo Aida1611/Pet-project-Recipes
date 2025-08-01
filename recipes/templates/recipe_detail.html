@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="recipe">
+    <h1>{{ recipe.title }}</h1>
+    <p>By {{ recipe.author.username }} | {{ recipe.created_at|date }}</p>
+    
+    <div class="images">
+        {% for image in recipe.images.all %}
+            <img src="{{ image.image_file.url }}" alt="{{ recipe.title }}">
+        {% endfor %}
+    </div>
+    
+    <h2>Description</h2>
+    <p>{{ recipe.description }}</p>
+    
+    <h2>Ingredients</h2>
+    <ul>
+        {% for ri in recipe.ingredients.all %}
+        <li>{{ ri.quantity }} {{ ri.get_unit_display }} {{ ri.ingredient.name }}</li>
+        {% endfor %}
+    </ul>
+    
+    <h2>Instructions</h2>
+    <p>{{ recipe.instructions|linebreaks }}</p>
+    
+    <h2>Comments</h2>
+    {% for comment in recipe.comments.all %}
+        <div class="comment">
+            <strong>{{ comment.user.username }}</strong>
+            <span>{{ comment.created_at|timesince }} ago</span>
+            <p>{{ comment.text }}</p>
+        </div>
+    {% endfor %}
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Add Comment</button>
+    </form>
+</div>
+{% endblock %}

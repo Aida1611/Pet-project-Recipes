@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1 class="mb-4">Последние рецепты</h1>
+    <div class="row">
+        {% for recipe in recipes %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if recipe.images.first %}
+                        <img src="{{ recipe.images.first.image_file.url }}" class="card-img-top" alt="{{ recipe.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ recipe.title }}</h5>
+                        <p class="card-text">{{ recipe.description|truncatewords:20 }}</p>
+                        <a href="{% url 'recipe-detail' recipe.pk %}" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <p>Нет рецептов.</p>
+        {% endfor %}
+    </div>
+{% endblock %}
